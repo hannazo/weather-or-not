@@ -37,13 +37,12 @@ function getWeather() {
                         $('#humidity').text(data.main.humidity + " %");
                         // Get five day forecast
                         getForecast();
-                        // Add button to "Past Searches"
-                        //$('.search-list').append('<button type="button" class="list-group-item btn btn-success">' + cityName + '</button>')
                     });
             }
             else {
                 console.log("Didn't find " + cityName + " in OpenWeather database");
                 window.alert("Unable to find the city you are looking for. Please try again.");
+                
             }
         });
 }
@@ -58,12 +57,16 @@ function getForecast() {
         .then(function (data) {
             console.log(data);
             // Add data to each card
-            let index = 3;
+            let index = 7;
             $('.forecast').each(function () {
+                var newDate = dayjs(data.list[index].dt_txt).format('MMMM D, YYYY');
+                console.log("Test: " + newDate);
+                $(this).children('.date').text(newDate);
+                $(this).children('.icon').attr('src', 'http://openweathermap.org/img/wn/' + data.list[index].weather[0].icon + '@2x.png');
                 $(this).children().children().children('.temperature').text(data.list[index].main.temp + " °C");
                 $(this).children().children().children('.wind').text(data.list[index].wind.speed + " MpS");
                 $(this).children().children().children('.humidity').text(data.list[index].main.humidity + " %");
-                index += 8;
+                index += 8; 
             })
         })
 }
@@ -92,7 +95,7 @@ function populateSearchHistory() {
     if (localStorageData !== null) {
         for (let i = 0; i < localStorageData.length; i++) {
 
-            $('.search-list').append('<button type="button" onclick="newRequest()" class="list-group-item btn btn-success city-name-btn">' + localStorageData[i] + '</button>')
+            $('.search-list').append('<button type="button" onclick="newRequest(event)" class="list-group-item btn btn-success city-name-btn">' + localStorageData[i] + '</button>')
         }
     }
 }
@@ -107,7 +110,8 @@ $('#search-btn').on('click', function (event) {
 });
 
 // List button
-function newRequest() {
-cityName = $('.city-name-btn').text();
-console.log('New city name:' + cityName);
+function newRequest(event) {
+    cityName = event.target.textContent;
+    console.log('New city name: ' + cityName);
+    getWeather();
 }
