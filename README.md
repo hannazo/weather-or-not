@@ -1,5 +1,4 @@
 # Weather Dashboard 
-https://hannazo.github.io/weather-or-not/
 
 ## Description
 This is a [weather dashboard](https://hannazo.github.io/weather-or-not/) that will run in the browser and feature dynamically updated HTML and CSS.
